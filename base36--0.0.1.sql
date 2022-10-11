@@ -3,7 +3,7 @@
 -- but only via CREATE EXTENSION
 \echo Use "CREATE EXTENSION base36" to load this file. \quit
 CREATE FUNCTION base36_encode(digits int)
-RETURNS text
+RETURNS character varying
 LANGUAGE plpgsql IMMUTABLE STRICT
   AS $$
     DECLARE
@@ -11,9 +11,12 @@ LANGUAGE plpgsql IMMUTABLE STRICT
       ret varchar;
       val int;
     BEGIN
+      IF digits = 0
+        THEN RETURN('0');
+      END IF;
       chars := ARRAY[
                 '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h',
-                'i','j','k','l','m','n','o','p','q','r','s','t', 'u','v','w','x','y','z'
+                'i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
               ];
 
       val := digits;
